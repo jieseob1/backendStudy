@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -11,7 +12,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString // 쉽게 출력
@@ -36,6 +39,17 @@ public class Article {
 
     //null 필드
     @Setter private String hashTag;
+
+
+    //양방향 바인딩 => one toMany
+
+    //원치않게 사라질수 있음 => cascade
+    //Tostring.Exclude를 안하면 circular referencing 문제가 생길 수 있다.
+    @ToString.Exclude // 이부분에서 articlecomment를 뽑는건 비정상
+    @OrderBy("id")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) //article테이블로부터 온것이다. => cascading으로 강하게 연결되어있어서 mappedby안하는 경우도 있다.
+    private final Set<ArticleComment> articleComments = new LinkedHashSet<>(); // 중복 허용x, collection으로 보겠다.
+
 
     // jpa auditing
     @CreatedDate @Column(nullable = false) private LocalDateTime createdAt;

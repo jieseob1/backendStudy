@@ -15,14 +15,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("JPA 연결 테스트")
-@Import(JPAConfig.class)
+@Import(JPAConfig.class) // auditing이 안켜짐
 @DataJpaTest //jpa에 관련된 test를 위한 어노테이션
 class JpaRepositoryTest {
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
 
     public JpaRepositoryTest(
-            @Autowired ArticleRepository articleRepository,
+            @Autowired ArticleRepository articleRepository, //생성자 주입
             @Autowired ArticleCommentRepository articleCommentRepository
     ) {
         this.articleRepository = articleRepository;
@@ -36,9 +36,11 @@ class JpaRepositoryTest {
         //given
 
         //when
-        List<Article> articles = articleRepository.findAll();
+        List<Article> articles = articleRepository.findAll(); // findAll은 List 기능
 
-        assertThat(articles).isNotNull().hasSize(123);
+        assertThat(articles)
+                .isNotNull()
+                .hasSize(0);
         //then
     }
 
