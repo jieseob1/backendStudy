@@ -1,6 +1,5 @@
 package spring.board.myBoard.domain;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,7 +9,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -72,7 +73,7 @@ public class Article {
     //의도를 전달한다.
     public static Article of (String title, String content, String hashTag) { //도메인과 관련있는 정보만
         return new Article(title,content,hashTag);
-    }
+    } //팩토리 메서드 패턴
 
     @Override
     public boolean equals(Object o) {
