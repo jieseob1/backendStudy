@@ -5,7 +5,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import spring.board.myBoard.domain.Article;
 
-@RepositoryRestResource
+@RepositoryRestResource // detection-strategy에서 annotated와 연관
 public interface ArticleRepository extends
         JpaRepository<Article, Long>,
         QuerydslPredicateExecutor<Article>
