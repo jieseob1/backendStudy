@@ -1,4 +1,4 @@
-
+# 더 많은 정보는 spring boot properties 확인
 logging:
   level:
     spring.board.myBoard: debug
@@ -7,32 +7,34 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/board #datasource url
-    username: victor
-    password: 1q2w3e4r
-    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:h2:mem:testdb
-#    username: sa
-#    driver-class-name: org.h2.Driver # h2 사용 방법
+#    url: jdbc:mysql://localhost:3306/board #datasource url
+#    username: victor
+#    password: 1q2w3e4r # 보안 뚫림 => 패스워드를 프로퍼티에 노출시켜서 처리 필요하다. external 환경변수로 주입하도록 변경해야함
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:testdb #test.mv.db 사용자명 위치에 추가해야함
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver # h2 사용 방법
   jpa:
     defer-datasource-initialization: true # test용 db 만들수 있게 하기 resources 부분 data.sql
     show-sql: true # sql문장 쿼리 보여줄까
     hibernate:
-      ddl-auto: create # 엔티티 보고 자동으로 테이블 데이터 유추, 자동으로 ddl 문을 만든다. => create 문을 자동으로 마듬
+      ddl-auto: update # 엔티티 보고 자동으로 테이블 데이터 유추, 자동으로 ddl 문을 만든다. => create 문을 자동으로 마듬
     properties:
-      hibernate.format_sql: true
+      hibernate.format_sql: true # format해서 이쁘게 보여줌
       hibernate.default_batch_fetch_size: 100 # jpa 복잡한 쿼리 => 한번에 벌크로 select => n+1 쿼리 문제 => 100개 단위로 셀렉
-      h2.console.enabled: true # inMemoryDB로 사용할 예정
-      sql.init.mode: always # data.sql을 언제 작동시킬꺼냐
-  config:
-    activate:
-      on-profile:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true # 원격 접속 허용 개발 환경에서만
   data:
-    rest:
+    rest: # data rest api 사용하기 위함
       base-path: /api
-      detection-strategy: annotated
-debug: false #각종 debug
-management.endpoints.web.exposure.include: "*" #actuactor endpoint 감춰져 있는거 활성활
+      detection-strategy: annotated # default => annotated => 어노테이션 지정한 것만 보여주는 것 => https://docs.spring.io/spring-data/rest/docs/4.1.6/reference/html/
+debug: false #각종 debug false로 해서 다 보지는 않게 하기 위함
+management.endpoints.web.exposure.include: "*" #actuactor endpoint 감춰져 있는거 활성활 => 이게 뭐임
 
 ---
 # 위에 --- 이 라인으로 document를 새로 만들 수 있다.
@@ -41,11 +43,11 @@ spring:
     activate:
       on-profile: testdb
   datasource:
-    url: jdbc:h2:mem:board;mode=mysql #
+    url: jdbc:h2:mem:board;mode=mysql #compatibility mode 사용 mysql로 사용하겠다.
     driver-class-name: org.h2.Driver
   sql:
     init:
       mode: always
-  test.database.replace: none #사용 안할 시 =>전역 설정 @AutoConfigureTestDatabase 안써도 된다.
+#  test.database.replace: none #사용 안할 시 =>전역 설정 @AutoConfigureTestDatabase 안써도 된다.
 
 # 테스트 DB용
