@@ -1,0 +1,15 @@
+select * from article;
+--show databases;
+--
+--create database board;
+--
+--
+--create user 'victor'@'localhost' identified by '1q2w3e4r';
+--
+--select 'user' from `mysql`.`user`;
+--
+--show grants for 'victor'@'localhost';
+--
+--grant all on `board`.* to 'victor'@'localhost' with grant option;
+--
+--flush privileges;
