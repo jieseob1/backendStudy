@@ -28,20 +28,22 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+//	rest repository를 검색함
 	implementation 'org.springframework.data:spring-data-rest-hal-explorer'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2'
-//	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'com.mysql:mysql-connector-j:8.0.33'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	implementation 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final'
 
 	//queryDsl 설정
-	implementation "com.querydsl:querydsl-jpa"
+	implementation "com.querydsl:querydsl-jpa" //spring dependency management가 관리해줌
 	implementation "com.querydsl:querydsl-core"
-	implementation "com.querydsl:querydsl-collections"
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // querydsl JPAAnnotationProcessor 사용 지정
+	implementation "com.querydsl:querydsl-collections" //나중 대비 넣어놓음
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // querydsl JPAAnnotationProcessor 사용 지정 gradle의 그루비 문법으로 버전 자동으로 넣게끔
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api" // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
 
@@ -52,10 +54,12 @@ tasks.named('test') {
 }
 
 //Querydsl 설정부
-def generated  = 'src/main/generated'
+def generated  = 'src/main/generated' //파일 경로 generated 경로 만들기로
 
-//querydsl Qclass 파일 생성 위치 지정 => 자동으로 클래스 생성 기능 => qClass
-tasks.withType(JavaCompile) {
+//querydsl Qclass 파일 생성 위치 지정 => 자동으로 클래스 생성 기능 => qClass => Qclass정보 build에서 generated로 꺼내오도록 => 이렇게 하는 이유는 gradle이 스캔하고 다음 intellij가 스캔하고자 하는 빌드 클래스 파일들이 있는 영역들을 한 번 더 스캔하면서 중복 스캔이 일어난다.
+//첫 번째 스캔 때 Qclass의 위치를 알았고 불러왔는데, 똑같은 클래스를 또 불러오려고 하다가 충돌나서 중복 문제가 발생한다. 따라서 위치를 일부러 옮김 즉, intellij가 빌드하는거랑, ./gradlew build 했을때의 차이가 발생할 수 있는것을 제거 함
+tasks.withType(JavaCompile) { //자바 컴파일 시에  소스 경로를 바꿔준다는 것임
+	//JavaCompile은 타입 지정자
 	options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
 

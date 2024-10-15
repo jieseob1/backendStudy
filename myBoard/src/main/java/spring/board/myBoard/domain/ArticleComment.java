@@ -22,7 +22,6 @@ import java.util.Objects;
     @Index(columnList = "createdAt"),
     @Index(columnList = "createdBy"),
 })
-
 @Entity // 엔티티임을 알려줌
 public class ArticleComment extends AuditingFields {
 
