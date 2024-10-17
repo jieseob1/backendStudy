@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ * /articles
+ * /articles/{article-id}
+ * /articles/search
+ * /articles/search-hashtag
+ */
 @RequestMapping("/articles")
 @Controller
 public class ArticleController {
