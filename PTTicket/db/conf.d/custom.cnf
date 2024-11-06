@@ -1,0 +1,8 @@
+[client]
+default-character-set=utf8mb4
+
+[mysqld]
+default_authentication_plugin=mysql_native_password # 기본 인증 플러그인 설정
+#기본 인증 암호화 플러그인이 원랜 mysql native password 였는데 caching sha2를 사용하게 됨=> 우리가 접속하는 클라이언트에는 지원하지 않는 경우가 있어서 호환성 문제로 인한 설정이다.
+
+

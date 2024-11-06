@@ -1,0 +1,22 @@
+# Use root/example as user/password credentials
+version: '3.8'
+# 도커 컴포즈 버전
+
+services:
+  #명확한  네이밍
+  mysql:
+    container_name: mysql_local
+    image: mysql:8.0.33
+    volumes: # 데이터를 유지할수록 있도록 함
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+      - MYSQL_DATABASE=pass_local
+      - MYSQL_USER=pass_local_user
+      - MYSQL_PASSWORD=passlocal123
+      - MYSQL_ROOT_PASSWORD=passlocal123
+      - TZ=Asia/Seoul
+    # (this is just an example, not intended to be a production configuration)
